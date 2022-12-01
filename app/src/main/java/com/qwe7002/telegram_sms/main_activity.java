@@ -121,6 +121,7 @@ public class main_activity extends AppCompatActivity {
 
         final EditText chat_id_editview = findViewById(R.id.chat_id_editview);
         final EditText bot_token_editview = findViewById(R.id.bot_token_editview);
+        final EditText api_domain_editview = findViewById(R.id.api_domain_editview);
         final EditText trusted_phone_number_editview = findViewById(R.id.trusted_phone_number_editview);
         final SwitchMaterial chat_command_switch = findViewById(R.id.chat_command_switch);
         final SwitchMaterial fallback_sms_switch = findViewById(R.id.fallback_sms_switch);
@@ -139,6 +140,7 @@ public class main_activity extends AppCompatActivity {
         }
 
         String bot_token_save = sharedPreferences.getString("bot_token", "");
+        String api_domain_save = sharedPreferences.getString("api_domain", "api.telegram.org");
         String chat_id_save = sharedPreferences.getString("chat_id", "");
 
         if (other_func.parse_string_to_long(chat_id_save) < 0) {
@@ -163,6 +165,7 @@ public class main_activity extends AppCompatActivity {
         }
 
         bot_token_editview.setText(bot_token_save);
+        api_domain_editview.setText(api_domain_save);
         chat_id_editview.setText(chat_id_save);
         trusted_phone_number_editview.setText(sharedPreferences.getString("trusted_phone_number", ""));
         battery_monitoring_switch.setChecked(sharedPreferences.getBoolean("battery_monitoring_switch", false));
@@ -268,6 +271,10 @@ public class main_activity extends AppCompatActivity {
                 Snackbar.make(v, R.string.token_not_configure, Snackbar.LENGTH_LONG).show();
                 return;
             }
+            if (api_domain_editview.getText().toString().isEmpty()) {
+                Snackbar.make(v, R.string.api_domain_not_configure, Snackbar.LENGTH_LONG).show();
+                return;
+            }
             new Thread(() -> service_func.stop_all_service(context)).start();
             final ProgressDialog progress_dialog = new ProgressDialog(main_activity.this);
             progress_dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -276,7 +283,7 @@ public class main_activity extends AppCompatActivity {
             progress_dialog.setIndeterminate(false);
             progress_dialog.setCancelable(false);
             progress_dialog.show();
-            String request_uri = network_func.get_url(bot_token_editview.getText().toString().trim(), "getUpdates");
+            String request_uri = network_func.get_url(api_domain_editview.getText().toString().trim(), bot_token_editview.getText().toString().trim(), "getUpdates");
             OkHttpClient okhttp_client = network_func.get_okhttp_obj(doh_switch.isChecked(), Paper.book("system_config").read("proxy_config", new proxy()));
             okhttp_client = okhttp_client.newBuilder()
                     .readTimeout(60, TimeUnit.SECONDS)
@@ -375,6 +382,10 @@ public class main_activity extends AppCompatActivity {
                 Snackbar.make(v, R.string.chat_id_or_token_not_config, Snackbar.LENGTH_LONG).show();
                 return;
             }
+            if (api_domain_editview.getText().toString().isEmpty()) {
+                Snackbar.make(v, R.string.api_domain_not_configure, Snackbar.LENGTH_LONG).show();
+                return;
+            }
             if (fallback_sms_switch.isChecked() && trusted_phone_number_editview.getText().toString().isEmpty()) {
                 Snackbar.make(v, R.string.trusted_phone_number_empty, Snackbar.LENGTH_LONG).show();
                 return;
@@ -405,7 +416,7 @@ public class main_activity extends AppCompatActivity {
             progress_dialog.setCancelable(false);
             progress_dialog.show();
 
-            String request_uri = network_func.get_url(bot_token_editview.getText().toString().trim(), "sendMessage");
+            String request_uri = network_func.get_url(api_domain_editview.getText().toString().trim(), bot_token_editview.getText().toString().trim(), "sendMessage");
             request_message request_body = new request_message();
             request_body.chat_id = chat_id_editview.getText().toString().trim();
             request_body.text = getString(R.string.system_message_head) + "\n" + getString(R.string.success_connect);
@@ -452,6 +463,7 @@ public class main_activity extends AppCompatActivity {
                     check_version_upgrade(false);
                     SharedPreferences.Editor editor = sharedPreferences.edit().clear();
                     editor.putString("bot_token", new_bot_token);
+                    editor.putString("api_domain", api_domain_editview.getText().toString().trim());
                     editor.putString("chat_id", chat_id_editview.getText().toString().trim());
                     if (trusted_phone_number_editview.getText().toString().trim().length() != 0) {
                         editor.putString("trusted_phone_number", trusted_phone_number_editview.getText().toString().trim());

@@ -47,9 +47,10 @@ class ussd_request_callback extends TelephonyManager.UssdResponseCallback {
         this.request_body = new request_message();
         this.request_body.chat_id = chat_id;
         String bot_token = sharedPreferences.getString("bot_token", "");
-        this.request_uri = network_func.get_url(bot_token, "SendMessage");
+        String api_domain = sharedPreferences.getString("api_domain", "");
+        this.request_uri = network_func.get_url(api_domain, bot_token, "SendMessage");
         if (message_id != -1) {
-            this.request_uri = network_func.get_url(bot_token, "editMessageText");
+            this.request_uri = network_func.get_url(api_domain, bot_token, "editMessageText");
             this.request_body.message_id = message_id;
         }
         this.message_header = context.getString(R.string.send_ussd_head);

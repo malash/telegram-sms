@@ -36,6 +36,7 @@ import okhttp3.Response;
 
 public class battery_service extends Service {
     static String bot_token;
+    static String api_domain;
     static String chat_id;
     static boolean doh_switch;
     private Context context;
@@ -59,6 +60,7 @@ public class battery_service extends Service {
         SharedPreferences sharedPreferences = context.getSharedPreferences("data", MODE_PRIVATE);
         chat_id = sharedPreferences.getString("chat_id", "");
         bot_token = sharedPreferences.getString("bot_token", "");
+        api_domain = sharedPreferences.getString("api_domain", "");
         doh_switch = sharedPreferences.getBoolean("doh_switch", true);
         boolean charger_status = sharedPreferences.getBoolean("charger_status", false);
         battery_receiver = new battery_receiver();
@@ -99,9 +101,9 @@ public class battery_service extends Service {
         final request_message request_body = new request_message();
         request_body.chat_id = battery_service.chat_id;
         request_body.text = obj.content;
-        String request_uri = network_func.get_url(battery_service.bot_token, "sendMessage");
+        String request_uri = network_func.get_url(battery_service.api_domain, battery_service.bot_token, "sendMessage");
         if ((System.currentTimeMillis() - last_receive_time) <= 5000L && last_receive_message_id != -1) {
-            request_uri = network_func.get_url(bot_token, "editMessageText");
+            request_uri = network_func.get_url(api_domain, bot_token, "editMessageText");
             request_body.message_id = last_receive_message_id;
             Log.d(TAG, "onReceive: edit_mode");
         }

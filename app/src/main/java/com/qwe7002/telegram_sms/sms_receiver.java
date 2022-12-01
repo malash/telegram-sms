@@ -68,8 +68,9 @@ public class sms_receiver extends BroadcastReceiver {
             return;
         }
         String bot_token = sharedPreferences.getString("bot_token", "");
+        String api_domain = sharedPreferences.getString("api_domain", "");
         String chat_id = sharedPreferences.getString("chat_id", "");
-        String request_uri = network_func.get_url(bot_token, "sendMessage");
+        String request_uri = network_func.get_url(api_domain, bot_token, "sendMessage");
 
         int intent_slot = extras.getInt("slot", -1);
         final int sub_id = extras.getInt("subscription", -1);

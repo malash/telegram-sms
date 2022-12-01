@@ -50,8 +50,9 @@ public class ussd_func {
         }
 
         String bot_token = sharedPreferences.getString("bot_token", "");
+        String api_domain = sharedPreferences.getString("api_domain", "");
         String chat_id = sharedPreferences.getString("chat_id", "");
-        String request_uri = network_func.get_url(bot_token, "sendMessage");
+        String request_uri = network_func.get_url(api_domain, bot_token, "sendMessage");
         request_message request_body = new request_message();
         request_body.chat_id = chat_id;
         request_body.text = context.getString(R.string.send_ussd_head) + "\n" + context.getString(R.string.ussd_code_running);
