@@ -28,20 +28,7 @@ network_func {
     private static final String DNS_OVER_HTTP_ADDRSS = "https://dns.alidns.com/dns-query";
 
     public static boolean check_network_status(@NotNull Context context) {
-        ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        assert manager != null;
-        boolean network_status = false;
-        Network[] networks = manager.getAllNetworks();
-        if (networks.length != 0) {
-            for (Network network : networks) {
-                NetworkCapabilities network_capabilities = manager.getNetworkCapabilities(network);
-                assert network_capabilities != null;
-                if (network_capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN)) {
-                    network_status = true;
-                }
-            }
-        }
-        return network_status;
+        return true;
     }
 
     @NotNull

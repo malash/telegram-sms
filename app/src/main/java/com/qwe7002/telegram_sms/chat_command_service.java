@@ -696,7 +696,9 @@ public class chat_command_service extends Service {
     @NotNull
     private String get_battery_info() {
         BatteryManager batteryManager = (BatteryManager) context.getSystemService(BATTERY_SERVICE);
-        assert batteryManager != null;
+        if (batteryManager == null) {
+            return "N/A";
+        }
         int battery_level = batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
         if (battery_level > 100) {
             Log.i(TAG, "The previous battery is over 100%, and the correction is 100%.");
