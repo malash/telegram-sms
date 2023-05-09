@@ -28,6 +28,7 @@ import java.util.Objects;
 import io.paperdb.Paper;
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -90,7 +91,8 @@ public class call_receiver extends BroadcastReceiver {
                 String dual_sim = other_func.get_dual_sim_card_display(context, slot, sharedPreferences.getBoolean("display_dual_sim_display_name", false));
                 request_body.text = "[" + dual_sim + context.getString(R.string.missed_call_head) + "]" + "\n" + context.getString(R.string.Incoming_number) + call_status_listener.incoming_number;
                 String request_body_raw = new Gson().toJson(request_body);
-                RequestBody body = RequestBody.create(request_body_raw, const_value.JSON);
+//                RequestBody body = RequestBody.create(request_body_raw, const_value.JSON);
+                RequestBody body = RequestBody.create(const_value.JSON, request_body_raw);
                 OkHttpClient okhttp_client = network_func.get_okhttp_obj(sharedPreferences.getBoolean("doh_switch", true), Paper.book("system_config").read("proxy_config", new proxy()));
                 Request request = new Request.Builder().url(request_uri).method("POST", body).build();
                 Call call = okhttp_client.newCall(request);

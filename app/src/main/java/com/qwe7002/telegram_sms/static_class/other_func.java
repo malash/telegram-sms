@@ -152,53 +152,17 @@ public class other_func {
     }
 
     public static int get_sub_id(Context context, int slot) {
-        int active_card = other_func.get_active_card(context);
-        if (active_card >= 2) {
-            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-                return -1;
-            }
-            SubscriptionManager subscriptionManager = (SubscriptionManager) context.getSystemService(Context.TELEPHONY_SUBSCRIPTION_SERVICE);
-            assert subscriptionManager != null;
-            return subscriptionManager.getActiveSubscriptionInfoForSimSlotIndex(slot).getSubscriptionId();
-        }
         return -1;
     }
 
     public static int get_active_card(Context context) {
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-            Log.d("get_active_card", "No permission.");
-            return -1;
-        }
-        SubscriptionManager subscriptionManager = (SubscriptionManager) context.getSystemService(Context.TELEPHONY_SUBSCRIPTION_SERVICE);
-        assert subscriptionManager != null;
-        return subscriptionManager.getActiveSubscriptionInfoCount();
+        return -1;
     }
 
 
     public static String get_sim_display_name(Context context, int slot) {
         final String TAG = "get_sim_display_name";
         String result = "Unknown";
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-            Log.d(TAG, "No permission.");
-            return result;
-        }
-        SubscriptionManager subscriptionManager = (SubscriptionManager) context.getSystemService(Context.TELEPHONY_SUBSCRIPTION_SERVICE);
-        assert subscriptionManager != null;
-        SubscriptionInfo info = subscriptionManager.getActiveSubscriptionInfoForSimSlotIndex(slot);
-        if (info == null) {
-            Log.d(TAG, "The active card is in the second card slot.");
-            if (get_active_card(context) == 1 && slot == 0) {
-                info = subscriptionManager.getActiveSubscriptionInfoForSimSlotIndex(1);
-            }
-            if (info == null) {
-                return result;
-            }
-            return result;
-        }
-        result = info.getDisplayName().toString();
-        if (info.getDisplayName().toString().contains("CARD") || info.getDisplayName().toString().contains("SUB")) {
-            result = info.getCarrierName().toString();
-        }
         return result;
     }
 

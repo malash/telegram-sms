@@ -36,6 +36,7 @@ import java.util.Objects;
 import io.paperdb.Paper;
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -109,7 +110,8 @@ public class notification_listener_service extends NotificationListenerService {
         request_message request_body = new request_message();
         request_body.chat_id = chat_id;
         request_body.text = getString(R.string.receive_notification_title) + "\n" + getString(R.string.app_name_title) + app_name + "\n" + getString(R.string.title) + title + "\n" + getString(R.string.content) + content;
-        RequestBody body = RequestBody.create(new Gson().toJson(request_body), const_value.JSON);
+//        RequestBody body = RequestBody.create(new Gson().toJson(request_body), const_value.JSON);
+        RequestBody body = RequestBody.create(const_value.JSON, new Gson().toJson(request_body));
         OkHttpClient okhttp_client = network_func.get_okhttp_obj(sharedPreferences.getBoolean("doh_switch", true), Paper.book("system_config").read("proxy_config", new proxy()));
         Request request = new Request.Builder().url(request_uri).method("POST", body).build();
         Call call = okhttp_client.newCall(request);

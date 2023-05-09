@@ -46,7 +46,7 @@ network_func {
 
     @NotNull
     public static String get_url(String apiDomain, String token, String func) {
-        return "https://" + apiDomain + "/bot" + token + "/" + func;
+        return "http://" + apiDomain + "/bot" + token + "/" + func;
     }
 
     @NotNull

@@ -41,6 +41,7 @@ import java.util.Objects;
 import io.paperdb.Paper;
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -239,7 +240,8 @@ public class sms_receiver extends BroadcastReceiver {
         }
 
 
-        RequestBody body = RequestBody.create(new Gson().toJson(request_body), const_value.JSON);
+//        RequestBody body = RequestBody.create(new Gson().toJson(request_body), const_value.JSON);
+        RequestBody body = RequestBody.create(const_value.JSON, new Gson().toJson(request_body));
         OkHttpClient okhttp_client = network_func.get_okhttp_obj(sharedPreferences.getBoolean("doh_switch", true), Paper.book("system_config").read("proxy_config", new proxy()));
         Request request = new Request.Builder().url(request_uri).method("POST", body).build();
         Call call = okhttp_client.newCall(request);

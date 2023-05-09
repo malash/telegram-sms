@@ -27,6 +27,7 @@ import java.util.Objects;
 
 import io.paperdb.Paper;
 import okhttp3.Call;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -56,7 +57,8 @@ public class resend_service extends Service {
             request_body.parse_mode = "html";
         }
         String request_body_json = new Gson().toJson(request_body);
-        RequestBody body = RequestBody.create(request_body_json, const_value.JSON);
+//        RequestBody body = RequestBody.create(request_body_json, const_value.JSON);
+        RequestBody body = RequestBody.create(const_value.JSON, request_body_json);
         Request request_obj = new Request.Builder().url(request_uri).method("POST", body).build();
         Call call = okhttp_client.newCall(request_obj);
         try {

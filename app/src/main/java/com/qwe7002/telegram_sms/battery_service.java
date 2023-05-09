@@ -29,6 +29,7 @@ import java.util.Objects;
 
 import io.paperdb.Paper;
 import okhttp3.Call;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -110,7 +111,8 @@ public class battery_service extends Service {
         last_receive_time = System.currentTimeMillis();
         OkHttpClient okhttp_client = network_func.get_okhttp_obj(battery_service.doh_switch, Paper.book("system_config").read("proxy_config", new proxy()));
         String request_body_raw = new Gson().toJson(request_body);
-        RequestBody body = RequestBody.create(request_body_raw, const_value.JSON);
+//        RequestBody body = RequestBody.create(request_body_raw, const_value.JSON);
+        RequestBody body = RequestBody.create(const_value.JSON, request_body_raw);
         Request request = new Request.Builder().url(request_uri).method("POST", body).build();
         Call call = okhttp_client.newCall(request);
         final String error_head = "Send battery info failed:";

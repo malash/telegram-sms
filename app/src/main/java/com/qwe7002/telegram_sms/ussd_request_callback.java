@@ -25,6 +25,7 @@ import java.util.Objects;
 import io.paperdb.Paper;
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -73,7 +74,8 @@ class ussd_request_callback extends TelephonyManager.UssdResponseCallback {
     private void network_progress_handle(String message) {
         request_body.text = message;
         String request_body_json = new Gson().toJson(request_body);
-        RequestBody body = RequestBody.create(request_body_json, const_value.JSON);
+//        RequestBody body = RequestBody.create(request_body_json, const_value.JSON);
+        RequestBody body = RequestBody.create(const_value.JSON, request_body_json);
         OkHttpClient okhttp_client = network_func.get_okhttp_obj(doh_switch, Paper.book("system_config").read("proxy_config", new proxy()));
         Request request_obj = new Request.Builder().url(request_uri).method("POST", body).build();
         Call call = okhttp_client.newCall(request_obj);
